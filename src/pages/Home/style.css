@@ -1,0 +1,46 @@
+.Page {
+    padding: 4rem 1.7rem;
+
+    .Cabecalho {
+        margin-bottom: 3rem;
+
+        h1 {
+            text-transform: uppercase;
+            margin-bottom: .5rem;
+        }
+    }
+
+    .Painel {
+        background-color: var(--color-bg-2);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 10px 15px -3px rgba(49, 49, 49, 0.18), 0 4px 6px -4px rgba(49, 49, 49, 0.18);
+
+        .painel-head {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+
+            h2 {
+                font-size: 2rem;
+            }
+
+        }
+    }
+}
+
+/* .Modal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.7rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .modal-window {
+        
+    }
+} */

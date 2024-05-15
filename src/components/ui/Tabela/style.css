@@ -1,0 +1,38 @@
+.Tabela {
+    /* margin-top: 2.5rem; */
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+
+    tr {
+        display: flex;
+        justify-content: space-between;
+        gap: 1.5rem;
+
+        padding: 1rem .7rem;
+
+        th, td {
+            text-align: left;
+            /* width: 23%; */
+            width: 100%;
+        }
+        th:last-child, td:last-child {
+            /* background-color: red; */
+            /* width: 40%; */
+            text-align: right;
+        }
+    }
+
+    tbody tr {
+        border: 1px solid var(--color-text);
+        border-radius: 10px;
+
+        margin-bottom: 1rem;
+
+        transition: all .3s ease;
+
+        &:hover {
+            background-color: #c0bfbe;
+        }
+    }
+}

@@ -1,0 +1,109 @@
+.Modal {
+    /* @include spacing-lateral(); */
+    background-color: rgba(35, 35, 35, 0.6);
+    backdrop-filter: blur(1px);
+
+    position: fixed;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 20;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    animation: showModal .3s ease-in-out;
+
+    .modal-background {   
+        position: absolute;    
+        width: 100%;
+        height: 100%;
+        z-index: 21;
+    }
+
+    .modal-window {
+        background-color: var(--color-bg-2);
+        width: 100%;
+        max-width: 38rem;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0px 1px 10px 0px #00000080;
+        /* box-shadow: 0 0 20px 5px #00000085; */
+        z-index: 30;
+
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        animation: showModal .5s ease-in-out;
+
+        .top-window {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .loading-db {
+            padding: 4.2rem 0;
+            text-align: center;
+        }
+
+        .content-window {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+
+            > label {
+                margin-bottom: -.5rem;
+            }
+
+            > select:has(option[value=""]:checked) {
+                color: #0000008a;
+            }
+            > select option {
+                color: var(--color-text);
+                font-weight: 600;
+
+                &:first-child {
+                    color: #0000008a;
+                    font-weight: 400;
+                }
+            }
+            > input {
+                height: 20px;
+            }
+
+            .msg-erro {
+                font-weight: 600;
+                color: red;
+            }
+
+            .label-check {
+                cursor: pointer;
+            }
+
+            .btns-window {
+                margin: 1.5rem auto 0;
+                display: flex;
+                max-width: 50%;
+                justify-content: space-between;
+                gap: 1.5rem;
+            }
+        }
+
+        
+    }
+
+
+    /* ANIMAÇÕES: */
+    @keyframes showModal {
+        0% {
+            opacity: 0; 
+        }
+        100% {
+            opacity: 1; 
+        }
+    }
+}
