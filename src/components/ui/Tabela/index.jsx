@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import './style.css';
 
 
-export function Tabela({ grupos }) {
+export function Tabela({ grupos, onOpenModalEdit }) {
        
 
     return (
@@ -32,29 +32,25 @@ export function Tabela({ grupos }) {
             </thead>
 
             <tbody>
-                
-                
-
-            {grupos.map((grupo)=> (
-                <tr key={grupo.id}>
+            {grupos.map((grupo, idx)=> (
+                <tr key={grupo.id} title={`ID: ${grupo.id}`}>
                     <td data-label="nome">{grupo.nome}</td>
 
-                    <td data-label="horas">0 {grupo.id}</td>
+                    <td data-label="horas">0 (estatico)</td>
 
                     <td data-label="acoes">
                         {/* <div className="actions"> */}
-                            <Link to='/grupo/13temqserDinamico'>
-                                Detalhes
+                            <Link className="link-tarefas" to={`/grupo/${grupo.id}`}>
+                                Ver tarefas
                             </Link>
 
-                            <button title="editar/excluir">
-                                Config
+                            <button title="editar/remover" onClick={()=> onOpenModalEdit(grupo, idx)}>
+                                Edit
                             </button>
                         {/* </div> */}
                     </td>
                 </tr>
             ))}  
-
             </tbody>
         </table>
     )

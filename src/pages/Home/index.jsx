@@ -23,9 +23,26 @@ import './style.css';
 export default function Home() {
     const [grupos, setGrupos] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
+    const [grupoEdit, setGrupoEdit] = useState(null);
+
+    const [idxGrupoClicado, setIdxGrupoClicado] = useState(null);
+
 
     useEffect(()=> console.log(grupos), [grupos]);
     
+    function onOpenModalAdd() {
+        setGrupoEdit(false);
+
+        setModalOpen(true);
+    }
+    function onOpenModalEdit(grupo, idx) {
+        setGrupoEdit(grupo);
+        setIdxGrupoClicado(idx);
+
+        setModalOpen(true);
+        // console.log(grupo);
+    }
+
 
     return (
         <>
@@ -45,16 +62,16 @@ export default function Home() {
                     <h2>Grupos (Atividades):</h2>
 
                     {grupos.length !== 0 && 
-                    <button className="btn-add" onClick={()=> setModalOpen(true)}>+ Add Grupo</button>}
+                    <button className="btn-add" onClick={onOpenModalAdd}>+ Add Grupo</button>}
                 </div>
 
                 <div className="painel-content">
                     {grupos.length === 0 ? (
-                        <button onClick={()=> setModalOpen(true)}>
+                        <button onClick={onOpenModalAdd}>
                             + Adicionar um Grupo/Atividade neste projeto
                         </button>
                     ) : (
-                        <Tabela grupos={grupos} />
+                        <Tabela grupos={grupos} onOpenModalEdit={onOpenModalEdit} />
                     )}
                 </div>
             </div>
@@ -62,7 +79,15 @@ export default function Home() {
             </div>         
         </main>
 
-        {modalOpen && <Modal closeModal={()=> setModalOpen(false)} grupos={grupos} setGrupos={setGrupos} />}
+        {modalOpen && 
+        <Modal 
+            closeModal={()=> setModalOpen(false)} 
+            grupos={grupos} 
+            setGrupos={setGrupos} 
+            grupoEdit={grupoEdit}
+            idxGrupoClicado={idxGrupoClicado}
+        />
+        }
 
         </>
     )

@@ -1,7 +1,7 @@
 // Funcionalidades / Libs:
 import { useState, useEffect } from 'react';
 // import { GRUPO_GET_ALL } from '../../API/requestApi';
-// import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // import Cookies from "js-cookie";
 
 // Contexts:
@@ -57,7 +57,10 @@ export default function Grupo() {
             <div className="grid">
 
             <div className='Cabecalho'>
-                <h1>Nome do Grupo aqui</h1>
+                <Link to='/home'> {'<'} Voltar</Link>
+                <h1>
+                    Nome do Grupo aqui
+                </h1>
                 
                 <p>Abaixo você adicionará Grupos de ações (atividades) que compoem este projeto.</p>
             </div>       

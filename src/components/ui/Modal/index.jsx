@@ -10,7 +10,7 @@ import './style.css';
 
 
 // eslint-disable-next-line react/prop-types
-export function Modal({ closeModal, grupos, setGrupos }) {
+export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicado }) {
     const [loadingDB, setLoadingDB] = useState(true);
     const [erro, setErro] = useState(false);
     const [gruposDB, setGruposDB] = useState([]);
@@ -18,7 +18,11 @@ export function Modal({ closeModal, grupos, setGrupos }) {
     const [newGrupo, setNewGrupo] = useState(false);
     
     const [grupoSelect, setGrupoSelect] = useState('');
-    const [inputNewGrupo, setInputNewGrupo] = useState('');
+    const [inputNewGrupo, setInputNewGrupo] = useState(grupoEdit.nome || '');
+    // const [inputNewGrupo, setInputNewGrupo] = useState(grupoEdit ? grupoEdit.nome : '');
+
+    const [confirmEdit, setConfirmEdit] = useState(false);
+
 
 
     useEffect(()=> {
@@ -29,12 +33,12 @@ export function Modal({ closeModal, grupos, setGrupos }) {
         
                 setGruposDB(response);
                 setLoadingDB(false);
-              } 
-              catch(erro) {
+            } 
+            catch(erro) {
                 console.log('Deu erro: ');
                 console.log(erro);
                 setErro(true);
-              } 
+            } 
             //   finally {
             //     setLoading(false);
             //   }
@@ -43,19 +47,34 @@ export function Modal({ closeModal, grupos, setGrupos }) {
     }, []);
 
 
-    function onChangeSelect(e) {
-        setGrupoSelect(e.target.value);      
-        // console.log(e.target.value);
-    }
+    // function onChangeSelect(e) {
+    //     setGrupoSelect(e.target.value);      
+    //     // console.log(e.target.value);
+    // }
 
-    function onNewGrupo() {
+    function onNewGrupoCheck() {
         setNewGrupo(!newGrupo);
         setErro(false);
         // setInputNewGrupo('');
         // setGrupoSelect('');
     }
 
-    async function onSubmitGrupo(e) {
+    function addGrupoListLocal(objGrupo) {
+        // Verifica se grupo já foi adicionado (pelo id):
+        if(!newGrupo) {
+            for(let grupo of grupos) {
+                if(grupo.id === objGrupo.id) {
+                    setErro('Este grupo já foi adicionado.');
+                    return false;
+                }
+            }
+        }
+
+        setGrupos((prev)=> [...prev, objGrupo]);
+        return true;
+    }
+
+    async function onSubmitAddGrupo(e) {
         e.preventDefault();
 
         if(newGrupo) {
@@ -68,7 +87,7 @@ export function Modal({ closeModal, grupos, setGrupos }) {
                     nome: response.nome
                 }
 
-                setGrupos((prev)=> [...prev, objGrupoInput]);
+                addGrupoListLocal(objGrupoInput);
             }
             catch(error) {
                 console.log('ERRO na API:');
@@ -78,7 +97,7 @@ export function Modal({ closeModal, grupos, setGrupos }) {
         } else {
             let objGrupoSelecionado = JSON.parse(grupoSelect);
             // console.log(objGrupoSelecionado);
-            if(addGrupoListLocal(objGrupoSelecionado)) {
+            if(!addGrupoListLocal(objGrupoSelecionado)) {
                 return;
             }
         }
@@ -86,23 +105,32 @@ export function Modal({ closeModal, grupos, setGrupos }) {
         closeModal();
     }
 
-    function addGrupoListLocal(objGrupo) {
-        // Verifica se grupo já foi adicionado (pelo id):
-        if(!newGrupo) {
-            for(let grupo of grupos) {
-                if(grupo.id === objGrupo.id) {
-                    setErro('Este grupo já foi adicionado.');
-                    return 'erro';
-                }
-            }
-        }
+    async function onSubmitEditGrupo() {
+        //UPDATE DB...
 
-        setGrupos((prev)=> [...prev, objGrupo]);
-        return false;
+        // UPDATE LOCAL (state):
+        let newListaGrupos = grupos;
+
+        newListaGrupos[idxGrupoClicado].nome = inputNewGrupo;
+
+        // console.log(newListaGrupos);
+        setGrupos(newListaGrupos);
+        setConfirmEdit(false);
+        closeModal();
     }
 
+    function onConfirmSubmitEdit(e) {
+        e.preventDefault();
 
+        console.log('Chama mini janela de confirmaçao');
+        setConfirmEdit(true);
+    }
 
+    // async function onRemoveGrupo(idGrupo) {
+    //     console.log(`Deletou midia id: ${idMedia}`);
+    // }
+
+    
 
     return (
         <div className="Modal">
@@ -111,11 +139,11 @@ export function Modal({ closeModal, grupos, setGrupos }) {
 
             <div className="modal-window">
                 <div className="top-window">
-                    <h3>Adicionar Grupo</h3>
+                    <h3>{grupoEdit ? 'Editar Grupo' : 'Adicionar Grupo'}</h3>
                     <button type='button' onClick={closeModal}>X</button>
                 </div>
 
-                {loadingDB ? (
+                {loadingDB && !grupoEdit ? (
 
                 <div className="loading-db">
                     <span>{!erro ? 'Buscando grupos existentes...' : 'Houve algum erro.'}</span>
@@ -123,8 +151,56 @@ export function Modal({ closeModal, grupos, setGrupos }) {
 
                 ) : (
 
-                <form className="content-window" onSubmit={onSubmitGrupo}>
-            
+                grupoEdit ? (
+
+                <form className="content-window edit" onSubmit={onConfirmSubmitEdit}>
+        
+                    <label htmlFor="grupo">Nome do grupo:</label>
+
+                    <input type="text" name="" id="grupo" className="show" placeholder='Digite aqui' value={inputNewGrupo} onChange={(e)=> setInputNewGrupo(e.target.value)}/>
+
+                    {/* {erro && <small className="msg-erro">{erro}</small>} */}
+                    
+                    {/* <label className="label-check">
+                        <input type="checkbox" checked={newGrupo} onChange={onNewGrupo} />
+                        <small> Não encontrou o que gostaria? Crie um novo grupo.</small>
+                    </label> */}
+
+                    <div className="btns-window">
+                        <button type='button' onClick={closeModal}>Cancelar</button>
+                        <button type="button" onClick={()=> console.log('call minimodalDelete')}>Remover</button>
+                        <button type='submit' disabled={inputNewGrupo === grupoEdit.nome || !inputNewGrupo}>
+                            Salvar
+                        </button>
+                    </div>
+
+                    {confirmEdit && (
+                        <div className="modal-background-delete">
+                            <div className="modal-delete">
+                                <h3>Certeza que desaja salvar as alterações?</h3>
+                                <p>
+                                    O nome do grupo passará a ser: <br />
+                                    <strong>{inputNewGrupo}</strong> <br />
+                                    Index: <strong>{idxGrupoClicado}</strong>
+                                </p>
+                                <div>
+                                    <button type="button" className="btn-yes" onClick={()=> onSubmitEditGrupo()}>
+                                        Sim
+                                    </button>
+                                    <button type="button" onClick={() => setConfirmEdit(false)}>
+                                        Não
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                </form>
+
+                ) : (
+
+                <form className="content-window" onSubmit={onSubmitAddGrupo}>
+        
                     <label htmlFor="grupo">{newGrupo ? 'Novo grupo: ' : 'Grupo: '}</label>
 
                     {newGrupo ? (
@@ -132,10 +208,11 @@ export function Modal({ closeModal, grupos, setGrupos }) {
                         <input type="text" name="" id="grupo" className="show" placeholder='Digite aqui' value={inputNewGrupo} onChange={(e)=> setInputNewGrupo(e.target.value)}/>
                     
                     ) : (
+
                         <select 
                         // id='grupo'
                         value={grupoSelect}
-                        onChange={onChangeSelect}
+                        onChange={(e)=> setGrupoSelect(e.target.value)}
                         className="show"
                         >
                             <option value="">Selecione um grupo</option>
@@ -146,11 +223,12 @@ export function Modal({ closeModal, grupos, setGrupos }) {
                             </option>
                             ))}
                         </select>
+                        
                     )}
                     {erro && <small className="msg-erro">{erro}</small>}
                     
                     <label className="label-check">
-                        <input type="checkbox" checked={newGrupo} onChange={onNewGrupo} />
+                        <input type="checkbox" checked={newGrupo} onChange={onNewGrupoCheck} />
                         <small> Não encontrou o que gostaria? Crie um novo grupo.</small>
                     </label>
 
@@ -160,6 +238,8 @@ export function Modal({ closeModal, grupos, setGrupos }) {
                     </div>
 
                 </form>
+
+                )
 
                 )}
             </div>
