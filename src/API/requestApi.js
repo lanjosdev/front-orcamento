@@ -10,7 +10,7 @@ export const API_URL = api.api_url;
 
 // End-Points / Rotas da API:
 // GRUPOS //
-// Lista todos os Grupos registrados
+// Lista todos os Grupos registrados (READ):
 export async function GRUPO_GET_ALL() {
    const response = await axios.get(API_URL + '/grupo', { 
       headers: { "Accept": "application/json" } 
@@ -20,10 +20,25 @@ export async function GRUPO_GET_ALL() {
    return response.data;
 }
 
-// Adiociona novo Grupo:
+// Adiociona novo Grupo (CREATE):
 export async function GRUPO_POST_ADD(grupo) {
    const response = await axios.post(API_URL + '/grupo', {
       "nome": grupo
+   },
+   { 
+      headers: { "Accept": "application/json" } 
+   }
+   );
+
+   // console.log(response.data);
+   return response.data;
+}
+
+// Edita nome do Grupo (UPDATE):
+export async function GRUPO_POST_EDIT(id_grupo, newNome) {
+   const response = await axios.post(API_URL + '/grupo/' + id_grupo, {
+      "nome": newNome,
+      "_method": "patch"
    },
    { 
       headers: { "Accept": "application/json" } 

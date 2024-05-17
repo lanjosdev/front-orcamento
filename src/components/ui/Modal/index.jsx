@@ -1,6 +1,6 @@
 // Funcionalidades / Libs:
 import { useState, useEffect } from "react";
-import { GRUPO_GET_ALL, GRUPO_POST_ADD } from '../../../API/requestApi.js';
+import { GRUPO_GET_ALL, GRUPO_POST_ADD, GRUPO_POST_EDIT } from '../../../API/requestApi.js';
 
 // Assets:
 // import { FiX, FiCheckCircle } from 'react-icons/fi';
@@ -79,6 +79,7 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
 
         if(newGrupo) {
             try {
+                // CREATE/ADD DB:
                 const response = await GRUPO_POST_ADD(inputNewGrupo);
                 console.log('SUCESSO AO SALVAR NO DB!');
                 // console.log(response);
@@ -87,6 +88,7 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
                     nome: response.nome
                 }
 
+                // CREATE/ADD LOCAL:
                 addGrupoListLocal(objGrupoInput);
             }
             catch(error) {
@@ -102,19 +104,33 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
             }
         }
 
+        // fecha modal
         closeModal();
     }
 
     async function onSubmitEditGrupo() {
-        //UPDATE DB...
+        try {
+            // UPDATE/EDIT DB...
+            const response = await GRUPO_POST_EDIT(grupoEdit.id, inputNewGrupo);
+            console.log('SUCESSO AO SALVAR NO DB!');
+            console.log(response);
 
-        // UPDATE LOCAL (state):
-        let newListaGrupos = grupos;
+            
+            // UPDATE/EDIT LOCAL (state):
+            let newListaGrupos = grupos;
 
-        newListaGrupos[idxGrupoClicado].nome = inputNewGrupo;
+            newListaGrupos[idxGrupoClicado].nome = inputNewGrupo;
+            // console.log(newListaGrupos);
+            setGrupos(newListaGrupos);
+            localStorage.setItem('gruposStorage', JSON.stringify(newListaGrupos));
+        }
+        catch(error) {
+            console.log('ERRO na API:');
+            // setErro(true);
+            console.log(error);
+        }
 
-        // console.log(newListaGrupos);
-        setGrupos(newListaGrupos);
+        // fecha modals
         setConfirmEdit(false);
         closeModal();
     }

@@ -28,7 +28,23 @@ export default function Home() {
     const [idxGrupoClicado, setIdxGrupoClicado] = useState(null);
 
 
-    useEffect(()=> console.log(grupos), [grupos]);
+    // Verifica se tem grupos salvo localmente (no 1o render):
+    useEffect(()=> {
+        const gruposLocal = localStorage.getItem('gruposStorage');
+        // console.log(reposLocal);
+
+        if(gruposLocal) {
+            setGrupos(JSON.parse(gruposLocal));
+        }
+    }, []);
+
+    // Salva localmente a cada alteração no state 'grupos':
+    useEffect(()=> {
+        localStorage.setItem('gruposStorage', JSON.stringify(grupos));
+        console.log(grupos);
+    }, [grupos]);
+
+
     
     function onOpenModalAdd() {
         setGrupoEdit(false);
