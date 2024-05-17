@@ -1,7 +1,7 @@
 // Funcionalidades / Libs:
 import { useState, useEffect } from 'react';
-// import { GRUPO_GET_ALL } from '../../API/requestApi';
-import { Link } from 'react-router-dom';
+import { GRUPO_GET_ID } from '../../API/requestApi';
+import { useLocation, Link } from 'react-router-dom';
 // import Cookies from "js-cookie";
 
 // Contexts:
@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom';
 
 // Components:
 import { Header } from '../../components/ui/Header';
-// import { Tabela } from '../../components/ui/Tabela';
-// import { Modal } from '../../components/ui/Modal';
+import { Tabela } from '../../components/ui/Tabela';
+import { ModalTarefa } from '../../components/ui/ModalTarefa';
 
 // Utils:
 
@@ -21,31 +21,48 @@ import './style.css';
 
 
 export default function Grupo() {
-    const [gruposDB, setGruposDB] = useState([]);
+    //const { idGrupo } = useParams(); // pega o parametro definido no routes.jsx
+    const location = useLocation();
+    const dadoRecebido = location.state; // recebe os dados(do grupo selecionado) da rota/page(/home) anterior pelo useLocation()
+
+    const [grupo, setGrupo] = useState(dadoRecebido);
+    const [tarefas, setTarefas] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    // const [erro, setErro] = useState(false);
+
+    
+    // Puxa dados do grupo pelo DB (isso verifica se ainda está existente):
+    useEffect(()=> {
+        async function carregaGrupo() {     
+            try {
+                const response = await GRUPO_GET_ID(dadoRecebido.id);
+                console.log('Dados deste grupo:');
+                console.log(response);
+                setGrupo(response);
+            } catch(erro) {
+                console.log('Deu erro!');
+                console.log(erro);
+                // usa navigate para page "NotFound" quando não encontrar cliente id
+            } 
+            //finally {
+            //  preencheCampos();
+            //}      
+        }
+        carregaGrupo();
+    }, [dadoRecebido]);
     
 
-    useEffect(()=> {
-        async function carregaGruposDB() {
-            // try {
-            //     const response = await GRUPO_GET_ALL();
-            //     console.log(response);
-        
-            //     setGruposDB(response);
-            //   } 
-            //   catch(erro) {
-            //     console.log('Deu erro: ');
-            //     console.log(erro);
-            //     // setErro(true);
-            //   } 
-            // //   finally {
-            // //     setLoading(false);
-            // //   }
-        }
-        carregaGruposDB();
-    }, []);
+    function onOpenModalAdd() {
+        // setGrupoEdit(false);
 
-    // function onShowModal() {
+        setModalOpen(true);
+    }
+    // function onOpenModalEdit(grupo, idx) {
+    //     setGrupoEdit(grupo);
+    //     setIdxGrupoEdit(idx);
 
+    //     // abri modal
+    //     setModalOpen(true);
     // }
 
 
@@ -59,24 +76,25 @@ export default function Grupo() {
             <div className='Cabecalho'>
                 <Link to='/home'> {'<'} Voltar</Link>
                 <h1>
-                    Nome do Grupo aqui
+                    {grupo.nome}
                 </h1>
                 
-                <p>Abaixo você adicionará Grupos de ações (atividades) que compoem este projeto.</p>
+                <p>Abaixo você adicionará Tarefas que compoem este grupo.</p>
             </div>       
 
             <div className="Painel">
                 <div className="painel-head">
-                    <h2>Grupos (Atividades):</h2>
+                    <h2>Tarefas:</h2>
 
-                    {/* {grupos.length !== 0 &&  */}
-                    <button className="btn-add">+ Add Grupo</button>
+                    {tarefas.length !== 0 && 
+                    <button className="btn-add" onClick={onOpenModalAdd}>+ Add Tarefa</button>
+                    }
                 </div>
 
                 <div className="painel-content">
             
-                        <button>
-                            + Adicionar um Grupo/Atividade neste projeto
+                        <button onClick={onOpenModalAdd}>
+                            + Adicionar uma tarefa neste grupo
                         </button>
                     
                 </div>
@@ -86,6 +104,15 @@ export default function Grupo() {
         </main>
 
         {/* {modalOpen && <Modal closeModal={()=> setModalOpen(false)} gruposDB={gruposDB} />} */}
+        {modalOpen && 
+        <ModalTarefa 
+            closeModal={()=> setModalOpen(false)} 
+            // grupos={grupos} 
+            // setGrupos={setGrupos} 
+            // grupoEdit={grupoEdit}
+            // idxGrupoClicado={idxGrupoEdit}
+        />
+        }
 
         </>
     )

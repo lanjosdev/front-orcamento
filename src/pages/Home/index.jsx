@@ -1,6 +1,6 @@
 // Funcionalidades / Libs:
 import { useState, useEffect } from 'react';
-
+import { GRUPO_GET_ID } from '../../API/requestApi';
 // import { useNavigate } from 'react-router-dom';
 // import Cookies from "js-cookie";
 
@@ -21,20 +21,23 @@ import './style.css';
 
 
 export default function Home() {
+    const [loading, setLoading] = useState(true);
+    const [erro, setErro] = useState('');
+    
     const [grupos, setGrupos] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [grupoEdit, setGrupoEdit] = useState(null);
 
-    const [idxGrupoClicado, setIdxGrupoClicado] = useState(null);
+    const [idxGrupoEdit, setIdxGrupoEdit] = useState(null);
 
 
     // Verifica se tem grupos salvo localmente (no 1o render):
     useEffect(()=> {
         const gruposLocal = localStorage.getItem('gruposStorage');
-        // console.log(reposLocal);
 
         if(gruposLocal) {
-            setGrupos(JSON.parse(gruposLocal));
+            comparaGruposLocalDB(JSON.parse(gruposLocal));
+            // setGrupos(JSON.parse(gruposLocal));
         }
     }, []);
 
@@ -42,8 +45,35 @@ export default function Home() {
     useEffect(()=> {
         localStorage.setItem('gruposStorage', JSON.stringify(grupos));
         console.log(grupos);
+        setLoading(false);
     }, [grupos]);
 
+
+    async function comparaGruposLocalDB(gruposLocal) {
+        let newGruposLocal = [];
+
+        for(let grupoLocal of gruposLocal) {
+            try {
+                const grupoDB = await GRUPO_GET_ID(grupoLocal.id);
+                if(grupoDB) {
+                    newGruposLocal.push(grupoDB);
+                }
+            }
+            catch(error) {
+                console.log('Deu ERRO:');
+                console.log(error);
+                setErro('Houve algum erro :(');
+            }
+        }
+        
+        if(newGruposLocal.length > 0) {
+            console.log(newGruposLocal);
+            setGrupos(newGruposLocal);
+        } else {
+            setGrupos(gruposLocal);
+        }
+
+    }
 
     
     function onOpenModalAdd() {
@@ -53,10 +83,10 @@ export default function Home() {
     }
     function onOpenModalEdit(grupo, idx) {
         setGrupoEdit(grupo);
-        setIdxGrupoClicado(idx);
+        setIdxGrupoEdit(idx);
 
+        // abri modal
         setModalOpen(true);
-        // console.log(grupo);
     }
 
 
@@ -77,17 +107,25 @@ export default function Home() {
                 <div className="painel-head">
                     <h2>Grupos (Atividades):</h2>
 
-                    {grupos.length !== 0 && 
+                    {(!loading && grupos.length !== 0) && 
                     <button className="btn-add" onClick={onOpenModalAdd}>+ Add Grupo</button>}
                 </div>
 
                 <div className="painel-content">
-                    {grupos.length === 0 ? (
+                    {loading ? (
+                        <p className='Loading'>{!erro ? 'Buscando grupos...' : erro}</p>
+                    ) : (
+                        grupos.length === 0 ? (
+
                         <button onClick={onOpenModalAdd}>
                             + Adicionar um Grupo/Atividade neste projeto
                         </button>
-                    ) : (
+
+                        ) : (
+
                         <Tabela grupos={grupos} onOpenModalEdit={onOpenModalEdit} />
+
+                        )                                                
                     )}
                 </div>
             </div>
@@ -101,7 +139,7 @@ export default function Home() {
             grupos={grupos} 
             setGrupos={setGrupos} 
             grupoEdit={grupoEdit}
-            idxGrupoClicado={idxGrupoClicado}
+            idxGrupoClicado={idxGrupoEdit}
         />
         }
 

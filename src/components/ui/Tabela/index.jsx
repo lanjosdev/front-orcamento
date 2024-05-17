@@ -1,6 +1,6 @@
 // Funcionalidades / Libs:
 // import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 // Contexts:
 // import { UserContext } from "../../contexts/userContext";
@@ -19,7 +19,11 @@ import './style.css';
 
 
 export function Tabela({ grupos, onOpenModalEdit }) {
-       
+    const navigate = useNavigate();
+
+    function sendDataNavigate(sendData) {
+        navigate(`/grupo/${sendData.id}`, { state: sendData });
+    }       
 
     return (
         <table className='Tabela'>
@@ -40,9 +44,9 @@ export function Tabela({ grupos, onOpenModalEdit }) {
 
                     <td data-label="acoes">
                         {/* <div className="actions"> */}
-                            <Link className="link-tarefas" to={`/grupo/${grupo.id}`}>
+                            <button className="link-tarefas" onClick={()=> sendDataNavigate(grupo)}>
                                 Ver tarefas
-                            </Link>
+                            </button>
 
                             <button title="editar/remover" onClick={()=> onOpenModalEdit(grupo, idx)}>
                                 Edit
