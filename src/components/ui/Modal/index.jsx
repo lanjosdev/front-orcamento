@@ -21,6 +21,7 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
     const [inputNewGrupo, setInputNewGrupo] = useState(grupoEdit.nome || '');
     // const [inputNewGrupo, setInputNewGrupo] = useState(grupoEdit ? grupoEdit.nome : '');
 
+    const [confirmAdd, setConfirmAdd] = useState(false);
     const [confirmEdit, setConfirmEdit] = useState(false);
 
 
@@ -29,6 +30,7 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
         async function carregaGruposDB() {
             try {
                 const response = await GRUPO_GET_ALL();
+                // const response = await [{id:1, nome: 'um'}, {id:2, nome: 'dois'}, {id:3, nome: 'tres'}];
                 // console.log(response);
         
                 setGruposDB(response);
@@ -74,13 +76,14 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
         return true;
     }
 
-    async function onSubmitAddGrupo(e) {
-        e.preventDefault();
+    async function onSubmitAddGrupo() {
+        // e.preventDefault();
 
         if(newGrupo) {
             try {
                 // CREATE/ADD DB:
                 const response = await GRUPO_POST_ADD(inputNewGrupo);
+                // const response = await {id: 4, nome: inputNewGrupo};
                 console.log('SUCESSO AO SALVAR NO DB!');
                 // console.log(response);
                 let objGrupoInput = {
@@ -135,6 +138,12 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
         closeModal();
     }
 
+    function onConfirmSubmitAdd(e) {
+        e.preventDefault();
+
+        console.log('Chama mini janela de confirmaçao');
+        setConfirmAdd(true);
+    }
     function onConfirmSubmitEdit(e) {
         e.preventDefault();
 
@@ -191,13 +200,13 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
                     </div>
 
                     {confirmEdit && (
-                        <div className="modal-background-delete">
+                        <div className="modal-background-mini">
                             <div className="modal-delete">
                                 <h3>Certeza que desaja salvar as alterações?</h3>
                                 <p>
-                                    O nome do grupo passará a ser: <br />
-                                    <strong>{inputNewGrupo}</strong> <br />
-                                    Index: <strong>{idxGrupoClicado}</strong>
+                                    O nome do grupo passará a ser:
+                                    <strong>{inputNewGrupo}</strong> 
+                                    {/* Index: <strong>{idxGrupoClicado}</strong> */}
                                 </p>
                                 <div>
                                     <button type="button" className="btn-yes" onClick={()=> onSubmitEditGrupo()}>
@@ -215,7 +224,7 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
 
                 ) : (
 
-                <form className="content-window" onSubmit={onSubmitAddGrupo}>
+                <form className="content-window" onSubmit={onConfirmSubmitAdd}>
         
                     <label htmlFor="grupo">{newGrupo ? 'Novo grupo: ' : 'Grupo: '}</label>
 
@@ -250,8 +259,32 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
 
                     <div className="btns-window">
                         <button type='button' onClick={closeModal}>Cancelar</button>
-                        <button type='submit' disabled={newGrupo ? !inputNewGrupo : !grupoSelect}>Adicionar</button>
+                        {newGrupo ? (
+                            <button type='submit' disabled={!inputNewGrupo}>Adicionar</button>
+                        ) : (
+                            <button type='button' onClick={onSubmitAddGrupo} disabled={!grupoSelect}>Adicionar</button>
+                        )}
                     </div>
+
+                    {confirmAdd && (
+                        <div className="modal-background-mini">
+                            <div className="modal-delete">
+                                <h3>O novo grupo será salvo:</h3>
+                                <p>
+                                    Nome do grupo: <strong>{inputNewGrupo}</strong>
+                                </p>
+                                <p>Deseja prosseguir?</p>
+                                <div>
+                                    <button type="button" className="btn-yes" onClick={onSubmitAddGrupo}>
+                                        Sim
+                                    </button>
+                                    <button type="button" onClick={() => setConfirmAdd(false)}>
+                                        Não
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 
                 </form>
 
