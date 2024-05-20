@@ -61,6 +61,44 @@ export async function GRUPO_POST_EDIT(idGrupo, newNome) {
 // GRUPOS END //
 
 
+// TAREFAS //
+// Adiciona nova Tarefa (CREATE):
+export async function TAREFA_POST_ADD(tarefa, tempo, description) {
+   const response = await axios.post(API_URL + '/tarefa', {
+      "nome": tarefa,
+      "tempo": tempo,
+      "descricao": description
+   },
+   { 
+      headers: { "Accept": "application/json" } 
+   }
+   );
+
+   // console.log(response.data);
+   return response.data;
+}
+// TAREFAS END //
+
+
+// TAREFAS-GRUPOS //
+// Adiciona nova Tarefa-Grupo (CREATE):
+export async function TAREFA_GRUPO_ADD(idGrupo, idTarefa, qtd = 1) {
+   const response = await axios.post(API_URL + '/tarefa-grupo', {
+      "grupo_id": idGrupo,
+      "tarefa_id": idTarefa,
+      "quantidade": qtd
+   },
+   { 
+      headers: { "Accept": "application/json" } 
+   }
+   );
+
+   // console.log(response.data);
+   return response.data;
+}
+// TAREFAS-GRUPOS END //
+
+
 
 
 

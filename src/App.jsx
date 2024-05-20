@@ -1,7 +1,7 @@
 // Funcionalidades / Libs:
 import { BrowserRouter } from 'react-router-dom';
-// import { ToastContainer } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Contexts Providers:
 // import UserProvider from './contexts/userContext';
@@ -19,6 +19,7 @@ export default function App() {
     <BrowserRouter>  
 
       <AppRoutes/>
+      <ToastContainer autoClose={3000} />
       {/* <UserProvider>
         <ToastContainer autoClose={3000} />
         <AppRoutes/>

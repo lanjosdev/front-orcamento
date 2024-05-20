@@ -45,13 +45,14 @@ export default function Home() {
     useEffect(()=> {
         localStorage.setItem('gruposStorage', JSON.stringify(grupos));
         console.log(grupos);
-        setLoading(false);
+        // setLoading(false);
     }, [grupos]);
 
 
     async function comparaGruposLocalDB(gruposLocal) {
         let newGruposLocal = [];
 
+        //deveria rodar um forEach async
         for(let grupoLocal of gruposLocal) {
             try {
                 const grupoDB = await GRUPO_GET_ID(grupoLocal.id);
@@ -64,6 +65,9 @@ export default function Home() {
                 console.log(error);
                 setErro('Houve algum erro :(');
             }
+            // finally {
+            //     setLoading(false);
+            // }
         }
         
         if(newGruposLocal.length > 0) {
@@ -73,6 +77,7 @@ export default function Home() {
             setGrupos(gruposLocal);
         }
 
+        setLoading(false);
     }
 
     

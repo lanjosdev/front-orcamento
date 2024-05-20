@@ -269,7 +269,7 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
                     {confirmAdd && (
                         <div className="modal-background-mini">
                             <div className="modal-delete">
-                                <h3>O novo grupo será salvo:</h3>
+                                <h3>Um novo grupo será salvo:</h3>
                                 <p>
                                     Nome do grupo: <strong>{inputNewGrupo}</strong>
                                 </p>

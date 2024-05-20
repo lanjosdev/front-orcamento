@@ -1,5 +1,5 @@
 .Modal {
-    /* @include spacing-lateral(); */
+    padding: 0 15px;
     background-color: rgba(35, 35, 35, 0.6);
     backdrop-filter: blur(1px);
 

@@ -103,10 +103,11 @@ export default function Grupo() {
             </div>         
         </main>
 
-        {/* {modalOpen && <Modal closeModal={()=> setModalOpen(false)} gruposDB={gruposDB} />} */}
+
         {modalOpen && 
         <ModalTarefa 
             closeModal={()=> setModalOpen(false)} 
+            grupo={grupo}
             // grupos={grupos} 
             // setGrupos={setGrupos} 
             // grupoEdit={grupoEdit}
