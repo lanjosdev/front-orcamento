@@ -25,9 +25,9 @@ export default function Home() {
     const [erro, setErro] = useState('');
     
     const [grupos, setGrupos] = useState([]);
+
     const [modalOpen, setModalOpen] = useState(false);
     const [grupoEdit, setGrupoEdit] = useState(null);
-
     const [idxGrupoEdit, setIdxGrupoEdit] = useState(null);
 
 
@@ -52,7 +52,6 @@ export default function Home() {
     async function comparaGruposLocalDB(gruposLocal) {
         let newGruposLocal = [];
 
-        //deveria rodar um forEach async
         for(let grupoLocal of gruposLocal) {
             try {
                 const grupoDB = await GRUPO_GET_ID(grupoLocal.id);
@@ -61,21 +60,22 @@ export default function Home() {
                 }
             }
             catch(error) {
-                console.log('Deu ERRO:');
+                console.log('Deu ERRO (ao buscar Grupo / ID):');
                 console.log(error);
                 setErro('Houve algum erro :(');
             }
             // finally {
             //     setLoading(false);
-            // }
+            // }   
         }
         
         if(newGruposLocal.length > 0) {
             console.log(newGruposLocal);
             setGrupos(newGruposLocal);
-        } else {
-            setGrupos(gruposLocal);
-        }
+        } 
+        // else {
+        //     setGrupos(gruposLocal);
+        // }
 
         setLoading(false);
     }
