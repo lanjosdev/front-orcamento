@@ -106,10 +106,13 @@
                 justify-content: center;
                 align-items: center;
                 
-                .modal-delete {
+                .modal-mini {
                     background-color: #fff;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1.3rem;
                     width: 100%;
-                    max-width: fit-content;
+                    max-width: 39rem;
     
                     border-radius: 10px;
                     padding: 15px;
@@ -118,7 +121,29 @@
                     animation: showModal .2s ease-in-out;
     
                     h3 {
-                        margin-bottom: 3rem;
+                        margin-bottom: 1rem;
+                    }
+                    
+                    .remover-grupo {
+                        display: flex;
+                        flex-direction: column;
+
+                        .label-input {
+                            margin-top: -1rem;
+                            /* background-color: red; */
+                            display: flex;
+                            flex-direction: column;
+                            gap: .1rem;
+
+                            font-size: 1.3rem;
+                            line-height: 120%;
+                            font-weight: 700;
+
+                            input {
+                                padding: .3rem;
+                                border: 2px solid var(--color-text);
+                            }
+                        }
                     }
     
                     div {
@@ -157,7 +182,9 @@
                         }
                     }
     
-    
+                    .btns-yes-no {
+                        margin-top: 1.2rem;
+                    }
                 }
             }
         }

@@ -19,7 +19,7 @@ export default function App() {
     <BrowserRouter>  
 
       <AppRoutes/>
-      <ToastContainer autoClose={3000} />
+      <ToastContainer autoClose={4000} />
       {/* <UserProvider>
         <ToastContainer autoClose={3000} />
         <AppRoutes/>

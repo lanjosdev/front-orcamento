@@ -12,6 +12,7 @@ export const API_URL = api.api_url;
 // GRUPOS //
 // Pega todos os Grupos registrados (READ):
 export async function GRUPO_GET_ALL() {
+   console.log('CALL FUNCTION API');
    const response = await axios.get(API_URL + '/grupo', { 
       headers: { "Accept": "application/json" } 
    });
@@ -22,6 +23,7 @@ export async function GRUPO_GET_ALL() {
 
 // Pega Grupo pelo ID (READ):
 export async function GRUPO_GET_ID(idGrupo) {
+   console.log('CALL FUNCTION API');
    const response = await axios.get(API_URL + '/grupo/' + idGrupo, { 
       headers: { "Accept": "application/json" } 
    });
@@ -32,6 +34,7 @@ export async function GRUPO_GET_ID(idGrupo) {
 
 // Adiciona novo Grupo (CREATE):
 export async function GRUPO_POST_ADD(grupo) {
+   console.log('CALL FUNCTION API');
    const response = await axios.post(API_URL + '/grupo', {
       "nome": grupo
    },
@@ -46,11 +49,24 @@ export async function GRUPO_POST_ADD(grupo) {
 
 // Edita nome do Grupo (UPDATE):
 export async function GRUPO_POST_EDIT(idGrupo, newNome) {
+   console.log('CALL FUNCTION API');
    const response = await axios.post(API_URL + '/grupo/' + idGrupo, {
       "nome": newNome,
       "_method": "patch"
    },
    { 
+      headers: { "Accept": "application/json" } 
+   }
+   );
+
+   // console.log(response.data);
+   return response.data;
+}
+
+// Deletar Grupo (DELETE):
+export async function GRUPO_DELETE(idGrupo) {
+   console.log('CALL FUNCTION API');
+   const response = await axios.delete(API_URL + '/grupo/' + idGrupo, {
       headers: { "Accept": "application/json" } 
    }
    );
@@ -64,6 +80,7 @@ export async function GRUPO_POST_EDIT(idGrupo, newNome) {
 // TAREFAS //
 // Adiciona nova Tarefa (CREATE):
 export async function TAREFA_POST_ADD(tarefa, tempo, description) {
+   console.log('CALL FUNCTION API');
    const response = await axios.post(API_URL + '/tarefa', {
       "nome": tarefa,
       "tempo": tempo,
@@ -83,6 +100,7 @@ export async function TAREFA_POST_ADD(tarefa, tempo, description) {
 // TAREFAS-GRUPOS //
 // Adiciona nova Tarefa-Grupo (CREATE):
 export async function TAREFA_GRUPO_ADD(idGrupo, idTarefa, qtd = 1) {
+   console.log('CALL FUNCTION API');
    const response = await axios.post(API_URL + '/tarefa-grupo', {
       "grupo_id": idGrupo,
       "tarefa_id": idTarefa,
@@ -125,13 +143,6 @@ export async function USER_LOGIN(email, password) {
         });
  }
   
- // Lista todos os Usuários cadastrados
- export async function USER_GET_ALL(token) {
-    const response = await axios.get(API_URL + "/user", { headers: { Authorization: "Bearer " + token } })
- 
-    console.log(response)
- }
- 
  // Encontrar usuário por string
  export async function USER_FIND_BY_STRING(text, token) {
     const response = await axios.get(API_URL + `/user/find/${text}`, { headers: { Authorization: "Bearer " + token } })

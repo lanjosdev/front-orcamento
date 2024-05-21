@@ -77,14 +77,6 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
     //     return true;
     // }
 
-    function onConfirmSubmitAddTarefa(e) {
-        e.preventDefault();
-
-        if(!confirmAdd) {
-            console.log('Deseja adicionar?');
-            setConfirmAdd(true);
-        }
-    }
     async function onSubmitAddTarefa() {
         console.log('adicionando no db..');
 
@@ -92,13 +84,19 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
             try {
                 // CREATE/ADD DB:
                 const response = await TAREFA_POST_ADD(inputTarefa, inputTempo, inputDescription);
-                console.log('SUCESSO AO SALVAR NO DB!');
+                if(response.erro) {
+                    toast.error('Esse grupo já existe');
+                    setConfirmAdd(false);
+                    return;
+                }
+
+                console.log('SUCESSO AO SALVAR tarefa NO DB!');
                 // console.log(response);
 
                 // add registro na tabela tarefas-grupos
                 try {
                     const response2 = await TAREFA_GRUPO_ADD(grupo.id, response.id);
-                    toast.success('Sucesso');
+                    toast.success('Nova tarefa criada');
                     console.log(response2);
                 }
                 catch(error) {
@@ -117,7 +115,7 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
             catch(error) {
                 console.log('ERRO na API:');
                 setErro(true);
-                toast.error('Houve algum erro ao enviar a tarefa.');
+                toast.error('Erro ao enviar a tarefa.');
                 console.log(error);
             }
         } else {
@@ -126,6 +124,14 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
             // if(!addGrupoListLocal(objGrupoSelecionado)) {
             //     return;
             // }
+        }
+    }
+    function onConfirmSubmitAddTarefa(e) {
+        e.preventDefault();
+
+        if(!confirmAdd) {
+            console.log('Deseja adicionar?');
+            setConfirmAdd(true);
         }
     }
 
@@ -145,7 +151,7 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
             newListaGrupos[idxGrupoClicado].nome = inputTarefa;
             // console.log(newListaGrupos);
             setGrupos(newListaGrupos);
-            localStorage.setItem('gruposStorage', JSON.stringify(newListaGrupos));
+            // localStorage.setItem('gruposStorage', JSON.stringify(newListaGrupos));
         }
         catch(error) {
             console.log('ERRO na API:');
@@ -157,7 +163,6 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
         setConfirmEdit(false);
         closeModal();
     }
-
     function onConfirmSubmitEdit(e) {
         e.preventDefault();
 
@@ -238,7 +243,7 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
 
                 ) : (
 
-                <form className="content-window" onSubmit={onConfirmSubmitAddTarefa}>
+                <form className="content-window tarefa" onSubmit={onConfirmSubmitAddTarefa}>
         
                     {/* <label htmlFor="grupo">{newTarefa ? 'Nova tarefa: ' : 'Tarefa: '}</label> */}
 
@@ -290,13 +295,12 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
                     </label>
 
                     <div className="btns-window">
-                        <button type='button' onClick={closeModal}>Cancelar</button>
                         {newTarefa ? (
                             <button type='submit' disabled={!(inputTarefa && inputTempo && inputDescription)}>Adicionar</button>
                         ) : (
                             <button type='button' onClick={()=> console.log('add apenas no local...')} disabled={!selectTarefa}>Adicionar</button>
                         )}
-                        
+                        <button type='button' onClick={closeModal}>Cancelar</button>
                     </div>
 
                 </form>
