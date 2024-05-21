@@ -1,6 +1,8 @@
 // Funcionalidades / Libs:
+// import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { GRUPO_GET_ALL, TAREFA_POST_ADD, GRUPO_POST_EDIT, TAREFA_GRUPO_ADD } from '../../../API/requestApi.js';
+import { TAREFA_GET_ALL, TAREFA_POST_ADD, GRUPO_POST_EDIT, TAREFA_GRUPO_ADD } from '../../../API/requestApi.js';
+import { formatarNumero } from '../../../utils/formatarNumbers.js';
 import { toast } from 'react-toastify';
 
 // Assets:
@@ -10,13 +12,18 @@ import { toast } from 'react-toastify';
 import './style.css';
 
 
+// ModalTarefa.propTypes = {
+//     closeModal: PropTypes.func.isRequired,
+//     grupoEdit: PropTypes.any,
+//     // grupos: PropTypes.array
+// }
 // eslint-disable-next-line react/prop-types
-export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, idxGrupoClicado }) {
+export function ModalTarefa({ closeModal, grupo, tarefas, setTarefas, tarefaEdit=false, idxGrupoClicado }) {
     const [loadingDB, setLoadingDB] = useState(true);
     const [erro, setErro] = useState('');
-    const [gruposDB, setGruposDB] = useState([]);
+    const [tarefasDB, setTarefasDB] = useState([]);
 
-    const [newTarefa, setNewTarefa] = useState(true);
+    const [newTarefa, setNewTarefa] = useState(false);
     
     const [selectTarefa, setSelectTarefa] = useState('');
     const [inputTarefa, setInputTarefa] = useState(tarefaEdit.nome || '');
@@ -29,24 +36,21 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
 
 
     useEffect(()=> {
-        async function carregaGruposDB() {
+        async function carregaTarefasDB() {
             try {
-                const response = await GRUPO_GET_ALL();
+                const response = await TAREFA_GET_ALL();
                 // console.log(response);
         
-                setGruposDB(response);
+                setTarefasDB(response);
                 setLoadingDB(false);
             } 
             catch(erro) {
                 console.log('Deu erro: ');
                 console.log(erro);
-                setErro('Houve algum erro.');
-            } 
-            //   finally {
-            //     setLoading(false);
-            //   }
+                setErro('Algum erro ao buscar tarefas.');
+            }
         }
-        carregaGruposDB();
+        carregaTarefasDB();
     }, []);
 
 
@@ -77,27 +81,37 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
     //     return true;
     // }
 
+    function addTarefaLocal(tarefaAdd) {
+        if(!newTarefa) {
+            for(let tarefa of tarefas) {
+                if(tarefa.id === tarefaAdd.id) {
+                    setErro('Esta tarefa já foi adicionada.')
+                    return false;
+                }
+            }
+        }
+
+        setTarefas(prev => [...prev, tarefaAdd]);
+        return true;
+    }
     async function onSubmitAddTarefa() {
-        console.log('adicionando no db..');
+        console.log('adicionando tarefa...');
 
         if(newTarefa) {
             try {
                 // CREATE/ADD DB:
                 const response = await TAREFA_POST_ADD(inputTarefa, inputTempo, inputDescription);
                 if(response.erro) {
-                    toast.error('Esse grupo já existe');
+                    toast.error('Essa tarefa já existe');
                     setConfirmAdd(false);
                     return;
                 }
-
-                console.log('SUCESSO AO SALVAR tarefa NO DB!');
-                // console.log(response);
 
                 // add registro na tabela tarefas-grupos
                 try {
                     const response2 = await TAREFA_GRUPO_ADD(grupo.id, response.id);
                     toast.success('Nova tarefa criada');
-                    console.log(response2);
+                    console.log(response2);                    
                 }
                 catch(error) {
                     console.log('Erro no tarefa-grupo');
@@ -119,12 +133,15 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
                 console.log(error);
             }
         } else {
-            let objGrupoSelecionado = JSON.parse(selectTarefa);
-            // console.log(objGrupoSelecionado);
-            // if(!addGrupoListLocal(objGrupoSelecionado)) {
-            //     return;
-            // }
+            let objTarefaSelecionada = JSON.parse(selectTarefa);
+            // console.log(objTarefaSelecionada);
+            if(!addTarefaLocal(objTarefaSelecionada)) {
+                return;
+            }
         }
+
+        // fecha modal
+        closeModal();
     }
     function onConfirmSubmitAddTarefa(e) {
         e.preventDefault();
@@ -169,11 +186,6 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
         console.log('Chama mini janela de confirmaçao');
         setConfirmEdit(true);
     }
-
-    // async function onRemoveGrupo(idGrupo) {
-    //     console.log(`Deletou midia id: ${idMedia}`);
-    // }
-
     
 
     return (
@@ -248,6 +260,7 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
                     {/* <label htmlFor="grupo">{newTarefa ? 'Nova tarefa: ' : 'Tarefa: '}</label> */}
 
                     {newTarefa ? (
+
                         <>
                         <div className="label-input show">
                             <label htmlFor="tarefa">Nova tarefa: </label>
@@ -277,9 +290,13 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
                             >
                                 <option value="">Selecione uma tarefa</option>
 
-                                {gruposDB.map((grupo)=> (
-                                <option key={grupo.id} value={`{"id":${grupo.id},"nome":"${grupo.nome}"}`}>
-                                    {grupo.nome}
+                                {tarefasDB.map((tarefaDB)=> (
+                                <option 
+                                key={tarefaDB.id} 
+                                value={`{"id":${tarefaDB.id},"nome":"${tarefaDB.nome}","descricao":"${tarefaDB.descricao}","tempo":${tarefaDB.tempo}}`}
+                                title={tarefaDB.descricao}
+                                >
+                                    {`${formatarNumero(tarefaDB.id)} - ${tarefaDB.nome}`}
                                 </option>
                                 ))}
                             </select>
@@ -298,8 +315,9 @@ export function ModalTarefa({ closeModal, grupo, setGrupos, tarefaEdit=false, id
                         {newTarefa ? (
                             <button type='submit' disabled={!(inputTarefa && inputTempo && inputDescription)}>Adicionar</button>
                         ) : (
-                            <button type='button' onClick={()=> console.log('add apenas no local...')} disabled={!selectTarefa}>Adicionar</button>
+                            <button type='button' onClick={onSubmitAddTarefa} disabled={!selectTarefa}>Adicionar</button>
                         )}
+
                         <button type='button' onClick={closeModal}>Cancelar</button>
                     </div>
 

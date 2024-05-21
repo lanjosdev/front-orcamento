@@ -346,12 +346,12 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
                     </label>
 
                     <div className="btns-window">
-                        <button type='button' onClick={closeModal}>Cancelar</button>
                         {newGrupo ? (
                             <button type='submit' disabled={!inputNewGrupo}>Adicionar</button>
                         ) : (
                             <button type='button' onClick={onSubmitAddGrupo} disabled={!grupoSelect}>Adicionar</button>
                         )}
+                        <button type='button' onClick={closeModal}>Cancelar</button>
                     </div>
 
                     {confirmAdd && (

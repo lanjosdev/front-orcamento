@@ -78,6 +78,17 @@ export async function GRUPO_DELETE(idGrupo) {
 
 
 // TAREFAS //
+// Pega todos as Tarefas registradas (READ):
+export async function TAREFA_GET_ALL() {
+   console.log('CALL FUNCTION API');
+   const response = await axios.get(API_URL + '/tarefa', { 
+      headers: { "Accept": "application/json" } 
+   });
+
+   // console.log(response.data);
+   return response.data;
+}
+
 // Adiciona nova Tarefa (CREATE):
 export async function TAREFA_POST_ADD(tarefa, tempo, description) {
    console.log('CALL FUNCTION API');
