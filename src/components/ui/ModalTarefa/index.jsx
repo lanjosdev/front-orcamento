@@ -1,7 +1,7 @@
 // Funcionalidades / Libs:
 // import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { TAREFA_GET_ALL, TAREFA_POST_ADD, GRUPO_POST_EDIT, TAREFA_GRUPO_ADD } from '../../../API/requestApi.js';
+import { TAREFA_GET_ALL, TAREFA_POST_ADD, TAREFA_DELETE, GRUPO_POST_EDIT, TAREFA_GRUPO_ADD } from '../../../API/requestApi.js';
 import { formatarNumero } from '../../../utils/formatarNumbers.js';
 import { toast } from 'react-toastify';
 
@@ -54,11 +54,6 @@ export function ModalTarefa({ closeModal, grupo, tarefas, setTarefas, tarefaEdit
     }, []);
 
 
-    // function onChangeSelect(e) {
-    //     setGrupoSelect(e.target.value);      
-    //     // console.log(e.target.value);
-    // }
-
     function onCheckNewTarefa() {
         setNewTarefa(!newTarefa);
         setErro('');
@@ -66,23 +61,9 @@ export function ModalTarefa({ closeModal, grupo, tarefas, setTarefas, tarefaEdit
         // setGrupoSelect('');
     }
 
-    // function addGrupoListLocal(objGrupo) {
-    //     // Verifica se grupo já foi adicionado (pelo id):
-    //     if(!newTarefa) {
-    //         for(let grupo of grupos) {
-    //             if(grupo.id === objGrupo.id) {
-    //                 setErro('Este grupo já foi adicionado.');
-    //                 return false;
-    //             }
-    //         }
-    //     }
-
-    //     setGrupos((prev)=> [...prev, objGrupo]);
-    //     return true;
-    // }
-
     function addTarefaLocal(tarefaAdd) {
         if(!newTarefa) {
+            // Verifica se tarefa já foi adicionado na lista UI(pelo id):
             for(let tarefa of tarefas) {
                 if(tarefa.id === tarefaAdd.id) {
                     setErro('Esta tarefa já foi adicionada.')
@@ -94,37 +75,48 @@ export function ModalTarefa({ closeModal, grupo, tarefas, setTarefas, tarefaEdit
         setTarefas(prev => [...prev, tarefaAdd]);
         return true;
     }
+
     async function onSubmitAddTarefa() {
         console.log('adicionando tarefa...');
 
         if(newTarefa) {
             try {
-                // CREATE/ADD DB:
+                // CREATE TAREFA DB:
                 const response = await TAREFA_POST_ADD(inputTarefa, inputTempo, inputDescription);
                 if(response.erro) {
                     toast.error('Essa tarefa já existe');
                     setConfirmAdd(false);
                     return;
+                } 
+                else {
+                    console.log(response);
                 }
 
-                // add registro na tabela tarefas-grupos
+                // CREATE um registro também na tabela 'tarefas-grupos':
                 try {
                     const response2 = await TAREFA_GRUPO_ADD(grupo.id, response.id);
                     toast.success('Nova tarefa criada');
-                    console.log(response2);                    
+                    console.log(response2);  
+                    
+
+                    // ADD TAREFA LOCAL:
+                    let objNewTarefa = {
+                        id: response.id,
+                        nome: response.nome,
+                        tempo: response.tempo,
+                        descricao: response.descricao
+                    }
+                    addTarefaLocal(objNewTarefa);                    
                 }
                 catch(error) {
                     console.log('Erro no tarefa-grupo');
                     console.log(error);
+                    // Remove Tarefa recem criada
+                    await TAREFA_DELETE(response.id);
                 }
-                
-
-                // CREATE/ADD LOCAL:
-                // addGrupoListLocal(objGrupoInput);
-
 
                 // fecha o modal pai
-                closeModal();
+                // closeModal();
             }
             catch(error) {
                 console.log('ERRO na API:');
@@ -196,7 +188,7 @@ export function ModalTarefa({ closeModal, grupo, tarefas, setTarefas, tarefaEdit
             <div className="modal-window">
                 <div className="top-window">
                     <h3>{tarefaEdit ? 'Editar Tarefa' : 'Adicionar Tarefa'}</h3>
-                    <button type='button' onClick={closeModal}>X</button>
+                    <button className="btn-close" type='button' onClick={closeModal}><ion-icon name="close-outline"></ion-icon></button>
                 </div>
 
                 {loadingDB && !tarefaEdit ? (

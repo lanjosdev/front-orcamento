@@ -11,6 +11,7 @@ import { GRUPO_GET_ID } from '../../API/requestApi';
 import { Header } from '../../components/ui/Header';
 import { Tabela } from '../../components/ui/Tabela';
 import { Modal } from '../../components/ui/Modal';
+import { toast } from "react-toastify";
 
 // Utils:
 
@@ -22,7 +23,7 @@ import './style.css';
 
 export default function Home() {
     const [loading, setLoading] = useState(true);
-    const [erro, setErro] = useState('');
+    const [showErro, setShowErro] = useState(false);
     
     const [grupos, setGrupos] = useState([]);
 
@@ -62,7 +63,7 @@ export default function Home() {
             catch(error) {
                 console.log('Deu ERRO (ao buscar Grupo / ID):');
                 console.log(error);
-                setErro('Houve algum erro :(');
+                setShowErro('Houve algum erro :(');
             }
             // finally {
             //     setLoading(false);
@@ -72,10 +73,14 @@ export default function Home() {
         if(newGruposLocal.length > 0) {
             console.log(newGruposLocal);
             setGrupos(newGruposLocal);
+
+            // setLoading(false);
         } 
-        // else {
-        //     setGrupos(gruposLocal);
-        // }
+        else {
+            // setGrupos(gruposLocal);
+            // setShowErro('Erro ao carregar grupos')
+            toast.error('Erro ao carregar grupos');
+        }
 
         setLoading(false);
     }
@@ -118,12 +123,18 @@ export default function Home() {
 
                 <div className="painel-content">
                     {loading ? (
-                        <p className='Loading'>{!erro ? 'Buscando grupos...' : erro}</p>
+
+                        <p className='Loading'>{!showErro ? 'Buscando grupos...' : 
+                        <>
+                            <ion-icon name="warning-outline"></ion-icon> {showErro}
+                        </>}</p>
+                        
                     ) : (
                         grupos.length === 0 ? (
 
-                        <button onClick={onOpenModalAdd}>
-                            + Adicionar um Grupo/Atividade neste projeto
+                        <button className='btn-add-secundary' onClick={onOpenModalAdd}>
+                            <ion-icon name="add-sharp"></ion-icon>
+                            Adicionar um Grupo/Atividade neste projeto
                         </button>
 
                         ) : (

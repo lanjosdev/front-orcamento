@@ -227,7 +227,7 @@ export function Modal({ closeModal, grupos, setGrupos, grupoEdit, idxGrupoClicad
             <div className="modal-window">
                 <div className="top-window">
                     <h3>{grupoEdit ? 'Editar Grupo' : 'Adicionar Grupo'}</h3>
-                    <button type='button' onClick={closeModal}>X</button>
+                    <button className="btn-close" type='button' onClick={closeModal}><ion-icon name="close-outline"></ion-icon></button>
                 </div>
 
                 {loadingDB && !grupoEdit ? (

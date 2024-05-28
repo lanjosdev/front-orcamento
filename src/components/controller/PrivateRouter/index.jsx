@@ -11,6 +11,19 @@ export default function PrivateRoute({ children }) {
     const [loading, setLoading] = useState(true);
     const [jogou, setJogou] = useState(false);
 
+    // async function checkLogin() {
+    //     const tokenCookie = Cookies.get('token');
+
+    //     if(tokenCookie) {
+    //         // se tiver user logado (com token)...
+    //         setIsLogged(true);
+    //         setLoading(false);
+    //     } else {
+    //         Cookies.remove('token');
+    //         setIsLogged(false);
+    //         setLoading(false);
+    //     }
+    // }
     useEffect(()=> {
         function verificaCookie() {
             const hasCookie = Cookies.get('FantaKey');
@@ -28,13 +41,19 @@ export default function PrivateRoute({ children }) {
     return (
         <>
         {loading ? (
+
             <h1 className='title-loading'>Carregando...</h1>
+
         ) : (
             
             !jogou ? (
+
                 children
+
             ) : (
+
                 <Navigate to='/blocked' />
+
             )
         
         )}

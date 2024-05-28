@@ -11,6 +11,7 @@ import AppRoutes from './routes'; //Config de rotas
 
 // Estilo Global:
 import './styles/global.css';
+import './styles/elements.css';
 
 
 export default function App() {

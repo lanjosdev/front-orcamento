@@ -57,7 +57,7 @@
                 }
                 
                 &:hover {
-                    background-color: var(--gray-300);
+                    background-color: var(--color-bg-2);
                     color: var(--color-text);
                 }
             }

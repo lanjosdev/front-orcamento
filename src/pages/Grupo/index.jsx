@@ -37,7 +37,7 @@ export default function Grupo() {
     // Puxa dados do grupo pelo DB (isso verifica se ainda está existente):
     useEffect(()=> {
         async function carregaInfoGrupo() {    
-            let id_grupo = dadoRecebido ? dadoRecebido.id : idGrupo;
+            let id_grupo = dadoRecebido ? dadoRecebido.id : idGrupo; //pega o id do grupo da page atual por useLocation OU useParams
         
             try {
                 const response = await GRUPO_GET_ID(id_grupo);
@@ -119,8 +119,9 @@ export default function Grupo() {
                     ) : (
                         tarefas.length === 0 ? (
 
-                        <button onClick={onOpenModalAdd}>
-                            + Adicionar uma tarefa neste grupo
+                        <button className='btn-add-secundary' onClick={onOpenModalAdd}>
+                            <ion-icon name="add-sharp"></ion-icon>
+                            Adicionar uma tarefa neste grupo
                         </button>
 
                         ) : (

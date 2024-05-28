@@ -47,7 +47,7 @@ export function Header() {
 
                 <Link to='/home'>
                     <img src={Logo} alt="Logotipo" />
-                    <img src={LogoP} className="imgP" alt="Logotipo" />
+                    {/* <img src={LogoP} className="imgP" alt="Logotipo" /> */}
                 </Link>
 
                 {/* {userDetails.loglevel === 100 && 

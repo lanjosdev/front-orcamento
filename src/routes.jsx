@@ -28,6 +28,11 @@ export default function AppRoutes() {
 
 
             {/* <Route path="/blocked" element={ <Brocked/> } /> */}
+
+
+            {/* <Route element={<PrivateRoute />}>
+                <Route path="/home" element={<Home/>} />
+            </Route> */}
         </Routes>
     )
 }

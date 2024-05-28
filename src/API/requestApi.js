@@ -105,6 +105,18 @@ export async function TAREFA_POST_ADD(tarefa, tempo, description) {
    // console.log(response.data);
    return response.data;
 }
+
+// Deletar Tarefa (DELETE):
+export async function TAREFA_DELETE(idTarefa) {
+   console.log('CALL FUNCTION API');
+   const response = await axios.delete(API_URL + '/tarefa/' + idTarefa, {
+      headers: { "Accept": "application/json" } 
+   }
+   );
+
+   // console.log(response.data);
+   return response.data;
+}
 // TAREFAS END //
 
 

@@ -1,4 +1,4 @@
-.Modal {
+.Modaldds {
     background-color: rgba(35, 35, 35, 0.6);
     backdrop-filter: blur(1px);
 
@@ -24,7 +24,7 @@
     }
 
     .modal-window {
-        background-color: var(--color-bg-2);
+        background-color: var(--color-bg-1);
         width: 100%;
         max-width: 39rem;
         padding: 2rem;
