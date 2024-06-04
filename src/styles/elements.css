@@ -1,4 +1,13 @@
-.btn-add {
+/* GRID LAYOUT */
+.grid {
+    width: 100%;
+    max-width: 1280px;
+
+    margin: 0 auto;
+}
+/* GRID LAYOUT */
+
+.btn-add, .btn-primary {
     background-color: var(--color-primary);
     padding: 0 1rem;
     /* height: $height; */
@@ -18,6 +27,10 @@
     &:active {
         filter: drop-shadow(0 0 8px var(--color-primary)) brightness(0.9);
     }
+}
+.btn-primary {
+    height: 5rem;
+    font-size: 1.6rem;
 }
 
 .btn-add-secundary {

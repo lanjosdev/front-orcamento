@@ -32,6 +32,7 @@ export default function UserProvider({ children }) {
         } 
         checkUserLogado();
     }, []);
+    
 
     // Logar usuario:
     async function logarUser(user) {

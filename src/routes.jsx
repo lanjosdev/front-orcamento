@@ -2,6 +2,8 @@
 import { Routes, Route } from "react-router-dom";
 
 // Pages:
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Grupo from './pages/Grupo';
 // import Termos from "./pages/Termos";
@@ -14,7 +16,11 @@ import Grupo from './pages/Grupo';
 export default function AppRoutes() {
     return (
         <Routes>
-            <Route path="/home" element={ <Home/> } />
+            <Route path="/" element={ <Login/> } />
+            <Route path="/register" element={ <Register/> } />
+
+            {/* /home será temp */}
+            <Route path="/home" element={ <Home/> } /> 
 
             <Route path="/grupo/:idGrupo" element={ <Grupo/> } />
 

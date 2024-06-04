@@ -1,0 +1,218 @@
+main.Login-container {
+    padding: 3rem 1.7rem;
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    display: flex;
+    align-items: center;
+    
+    .grid {        
+        max-width: 900px;
+
+        display: flex;
+        justify-content: center;
+    }
+
+    .cabecalho-form {
+        width: 100%;
+        max-width: 390px;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        div {
+            width: 100%;
+            max-width: 200px;
+            line-height: 0;
+
+            margin-bottom: 5rem;
+    
+            img {
+                width: 100%;
+            }
+        }
+
+        h1 {
+            font-size: 3.8rem;
+            line-height: 150%; /* 54px */
+            letter-spacing: -0.36px;
+
+            margin-bottom: 1.5rem;
+        }
+    }
+
+    form {
+        background-color: var(--color-bg-2);
+        border-radius: 10px;
+        padding: 5rem 3.5rem;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.144), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+        width: 100%;
+        min-width: 430px;
+        max-width: 440px;
+        z-index: 1;
+
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+
+        .input-div {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            ion-icon {
+                position: absolute;
+                /* top: calc(50% - 7px); */
+                left: 1.6rem;
+            }
+            input {
+                background-color: #fff;
+                width: 100%;
+                border-radius: 10px;
+                
+                padding: 1.5rem 2rem 1.5rem 4rem;
+
+                font-size: 1.6rem;
+                
+                transition: all .3s ease-in-out;
+
+                &:hover {
+                    box-shadow: 0 0 0 1px #3889e0;
+                } 
+                &:focus {
+                    box-shadow: 0 0 0 2px #5d9cdf, 0 0 0 5px #A0BDDD;
+                }               
+            }
+        }
+
+        .show-senha {
+            display: flex;
+            align-items: center;
+            gap: .7rem;            
+
+            input {
+                width: 1.6rem;
+                height: 1.6rem;
+            }
+            input, label {
+                cursor: pointer;
+            }
+        }
+
+        button {
+            /* @include style-btn(5rem, $color-main, 2rem, $white); */
+            font-weight: 700;
+            border-radius: 10px;
+        
+            margin-top: 1.5rem;
+
+            /* &:hover {
+                box-shadow: 0px 1px 7px 2px rgba(49, 49, 49, 0.295);
+                 filter: drop-shadow(0 0 8px $color-main) brightness(1.1);
+            }
+            &:active {
+                filter: drop-shadow(0 0 8px $color-main) brightness(0.9);
+            } */
+        }
+
+        a {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            font-weight: 600;
+            text-align: center;
+
+            margin-bottom: -1rem;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+    }
+
+
+    /* RESPONSIVIDADE: */
+    @media screen and (max-width: 767px) {
+        min-height: auto;
+
+        .grid {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .cabecalho-form {
+            max-width: 440px; 
+        
+            div {    
+                margin-bottom: 3.5rem;
+            }
+        }
+
+
+        form {    
+            min-width: 250px;
+        }
+    }
+
+    /* Mobile geral */
+    @media screen and (max-width: 480px) {
+        .grid {
+            position: relative;
+            top: -5px;
+        }
+
+        .cabecalho-form {
+            div {
+                animation: showLogo .5s ease-in-out;
+            }
+
+            h1 {
+                font-size: 3.2rem;
+            }
+        }
+
+        form {
+            padding: 4.5rem 3rem;
+        }
+    }
+
+    /* ANIMAÇÕES: */
+    @keyframes showLogo {
+        0% {
+            transform: scale(.6);
+        }
+        100% {
+            transform: scale(1);
+        }
+    }
+}
+
+footer {
+    position: absolute;
+    bottom: 2%;
+    right: 0;
+    left: 0;
+    /* z-index: -1; */
+
+    text-align: center;
+    font-weight: 500;
+
+
+    /* RESPONSIVIDADE: */
+    @media screen and (max-width: 767px) {
+        position: static;
+
+        margin-bottom: 1rem;
+    }
+
+    /* Mobile geral */
+    @media screen and (max-width: 480px) {
+        position: absolute;
+        bottom: 13px;
+        right: 0;
+        left: 0;
+    }
+}
