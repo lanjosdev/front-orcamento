@@ -13,6 +13,7 @@ export const API_URL = api.api_url;
 // Pega todos os Grupos registrados (READ):
 export async function GRUPO_GET_ALL() {
    console.log('CALL FUNCTION API');
+
    const response = await axios.get(API_URL + '/grupo', { 
       headers: { "Accept": "application/json" } 
    });
@@ -24,6 +25,7 @@ export async function GRUPO_GET_ALL() {
 // Pega Grupo pelo ID (READ):
 export async function GRUPO_GET_ID(idGrupo) {
    console.log('CALL FUNCTION API');
+
    const response = await axios.get(API_URL + '/grupo/' + idGrupo, { 
       headers: { "Accept": "application/json" } 
    });
@@ -35,6 +37,7 @@ export async function GRUPO_GET_ID(idGrupo) {
 // Adiciona novo Grupo (CREATE):
 export async function GRUPO_POST_ADD(grupo) {
    console.log('CALL FUNCTION API');
+
    const response = await axios.post(API_URL + '/grupo', {
       "nome": grupo
    },
@@ -50,6 +53,7 @@ export async function GRUPO_POST_ADD(grupo) {
 // Edita nome do Grupo (UPDATE):
 export async function GRUPO_POST_EDIT(idGrupo, newNome) {
    console.log('CALL FUNCTION API');
+
    const response = await axios.post(API_URL + '/grupo/' + idGrupo, {
       "nome": newNome,
       "_method": "patch"
@@ -66,6 +70,7 @@ export async function GRUPO_POST_EDIT(idGrupo, newNome) {
 // Deletar Grupo (DELETE):
 export async function GRUPO_DELETE(idGrupo) {
    console.log('CALL FUNCTION API');
+
    const response = await axios.delete(API_URL + '/grupo/' + idGrupo, {
       headers: { "Accept": "application/json" } 
    }
@@ -81,6 +86,7 @@ export async function GRUPO_DELETE(idGrupo) {
 // Pega todos as Tarefas registradas (READ):
 export async function TAREFA_GET_ALL() {
    console.log('CALL FUNCTION API');
+
    const response = await axios.get(API_URL + '/tarefa', { 
       headers: { "Accept": "application/json" } 
    });
@@ -92,6 +98,7 @@ export async function TAREFA_GET_ALL() {
 // Adiciona nova Tarefa (CREATE):
 export async function TAREFA_POST_ADD(tarefa, tempo, description) {
    console.log('CALL FUNCTION API');
+
    const response = await axios.post(API_URL + '/tarefa', {
       "nome": tarefa,
       "tempo": tempo,
@@ -109,6 +116,7 @@ export async function TAREFA_POST_ADD(tarefa, tempo, description) {
 // Deletar Tarefa (DELETE):
 export async function TAREFA_DELETE(idTarefa) {
    console.log('CALL FUNCTION API');
+
    const response = await axios.delete(API_URL + '/tarefa/' + idTarefa, {
       headers: { "Accept": "application/json" } 
    }
@@ -124,6 +132,7 @@ export async function TAREFA_DELETE(idTarefa) {
 // Adiciona nova Tarefa-Grupo (CREATE):
 export async function TAREFA_GRUPO_ADD(idGrupo, idTarefa, qtd = 1) {
    console.log('CALL FUNCTION API');
+
    const response = await axios.post(API_URL + '/tarefa-grupo', {
       "grupo_id": idGrupo,
       "tarefa_id": idTarefa,
@@ -146,37 +155,22 @@ export async function TAREFA_GRUPO_ADD(idGrupo, idTarefa, qtd = 1) {
 
 // Logar usuário
 export async function USER_LOGIN(email, password) {
-    const response = await axios.post(API_URL + "/login", {
-       "email": email,
-       "password": password,
-    })
-    
-    const token = response.data.data;
-    return token; 
-    //Nessa response vem o token que precisa ser salvo em localStorage ou cookies pra manter o usuário autenticado.
- }
- 
- // Check Token
- export async function CHECK_TOKEN(token) {
- 
-    await axios.get(API_URL + "api/checkToken", { headers: { Authorization: "Bearer " + token } })
-        .then((response)=>{
-          console.log(`Status da função CHECK TOKEN: ${response.status}`);
-           return (response.status !== 200);
-        });
- }
-  
- // Encontrar usuário por string
- export async function USER_FIND_BY_STRING(text, token) {
-    const response = await axios.get(API_URL + `/user/find/${text}`, { headers: { Authorization: "Bearer " + token } })
- 
-    console.log(response)
- }
- 
- // Encontrar usuário por ID
- //CONFIRMAR COM O RENATO SE O IDENTIFICADOR É NUMBER OU STRING COMO APONTA NA DOCUMENTAÇÃO
- export async function USER_FIND_BY_ID(id, token) {
-    const response = await axios.get(API_URL + `/user/find${id}`, { headers: { Authorization: "Bearer " + token } })
- 
-    console.log(response)
- }
+   const response = await axios.post(API_URL + "/login", {
+      "email": email,
+      "password": password,
+   })
+   
+   const token = response.data.data;
+   return token; 
+   //Nessa response vem o token que precisa ser salvo em localStorage ou cookies pra manter o usuário autenticado.
+}
+
+// Check Token
+export async function CHECK_TOKEN(token) {
+
+   await axios.get(API_URL + "api/checkToken", { headers: { Authorization: "Bearer " + token } })
+      .then((response)=>{
+         console.log(`Status da função CHECK TOKEN: ${response.status}`);
+         return (response.status !== 200);
+      });
+}

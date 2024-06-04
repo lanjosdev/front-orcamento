@@ -84,7 +84,11 @@ main.Login-container {
                 } 
                 &:focus {
                     box-shadow: 0 0 0 2px #5d9cdf, 0 0 0 5px #A0BDDD;
-                }               
+                }  
+                
+                &.erro {
+                    box-shadow: 0 0 0 1px red;
+                }
             }
         }
 
