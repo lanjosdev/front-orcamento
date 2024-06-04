@@ -7,10 +7,8 @@ import { Link } from "react-router-dom";
 
 // // Assets:
 import Logo from '../../../assets/LOGO-BIZSYS_preto.png';
-import LogoP from '../../../assets/BIZSYS_logo_icon.png';
+// import LogoP from '../../../assets/BIZSYS_logo_icon.png';
 // import { TbLogout } from 'react-icons/tb';
-// import { MdClose, MdMenu } from 'react-icons/md';
-
 
 // Estilo:
 import './style.css';

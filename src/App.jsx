@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Contexts Providers:
-// import UserProvider from './contexts/userContext';
+import UserProvider from './contexts/userContext';
 
 // Components:
 import AppRoutes from './routes'; //Config de rotas
@@ -19,12 +19,11 @@ export default function App() {
   return (
     <BrowserRouter>  
 
-      <AppRoutes/>
-      <ToastContainer autoClose={4000} />
-      {/* <UserProvider>
-        <ToastContainer autoClose={3000} />
+      <UserProvider>
         <AppRoutes/>
-      </UserProvider>   */}
+        <ToastContainer autoClose={3000} />
+      </UserProvider>  
+      
     </BrowserRouter>
   )
 }

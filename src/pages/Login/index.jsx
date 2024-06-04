@@ -1,8 +1,7 @@
 // Funcionalidades / Libs:
-import { useState, useRef, useContext, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-
-import Cookies from "js-cookie";
+import { useContext, useState, useRef } from "react";
+import { Link } from "react-router-dom";
+// import Cookies from "js-cookie";
 
 // Contexts:
 import { UserContext } from '../../contexts/userContext';
@@ -10,7 +9,7 @@ import { UserContext } from '../../contexts/userContext';
 // Assets:
 import Logo from '../../assets/LOGO-BIZSYS_preto.png';
 
-// // Estilo:
+// Estilo:
 import './style.css';
 
 
@@ -22,30 +21,30 @@ export default function Login() {
     const passwordRef = useRef('');
     const [showSenha, setShowSenha] = useState(false);
 
-    const {loadingAuth, logarUser} = useContext(UserContext); 
-    
-    const navigate = useNavigate();
+    const { loading, logarUser } = useContext(UserContext); 
+    // const navigate = useNavigate();
 
 
     //Usar um useEffect que se tiver logado direcione para page home (chamar função no context)
-    useEffect(()=> {
-        function checkUserLogado() {
-        const userCookie = Cookies.get('userLocal');
-        if(userCookie) {
-            navigate('/home'); //Será checkado a validade do token ao passar no userContenxt
-        } 
-        } 
-        checkUserLogado();
-    }, [navigate]);
+    // useEffect(()=> {
+    //     function checkUserLogado() {
+    //     const userCookie = Cookies.get('userLocal');
+    //     if(userCookie) {
+    //         navigate('/home'); //Será checkado a validade do token ao passar no userContenxt
+    //     } 
+    //     } 
+    //     checkUserLogado();
+    // }, [navigate]);
 
-    async function handleSubmitLogin(e) {
+    async function onSubmitLogin(e) {
         e.preventDefault();
 
         const email = emailRef.current?.value;
         const password = passwordRef.current?.value;
 
         if(email !== '' && password !== '') {
-        await logarUser(email) //colocar email e password
+            console.log('logando...');
+            await logarUser(email, password);
         }        
     } 
   
@@ -59,7 +58,7 @@ export default function Login() {
                 <h1>Faça seu login no ambiente</h1>
             </div>
 
-            <form onSubmit={handleSubmitLogin} autoComplete="off">
+            <form onSubmit={onSubmitLogin} autoComplete="off">
                 <div className="input-div">
                     <ion-icon name="person-outline"></ion-icon>
                     <input
@@ -76,8 +75,6 @@ export default function Login() {
                         type={showSenha ? 'text' : 'password'}
                         placeholder='Senha'
                         ref={passwordRef}
-                        //   value={password}
-                        //   onChange={(e)=> setPassword(e.target.value)}
                         required
                     />
                 </div>
@@ -92,7 +89,7 @@ export default function Login() {
                 </div>
 
                 <button className="btn-primary">
-                    {loadingAuth ? 'Verificando...' : 'Entrar'}
+                    {loading ? 'Verificando...' : 'Entrar'}
                 </button>
                 <Link to='/register'>Ainda não tem conta? Cadastra-se!</Link>
             </form>
