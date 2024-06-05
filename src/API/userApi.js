@@ -38,11 +38,25 @@ export async function USER_LOGIN(email, senha) {
    },
    { 
       headers: { "Accept": "application/json" } 
-   }
-   );
+   });
 
    // console.log(response.data);
    return response.data;
+}
+
+// Logout usuario:
+export async function USER_LOGOUT(token) {
+   console.log('CALL FUNCTION API');
+   console.log(token);
+   
+   const respons = await fetch(API_URL + '/logout', {
+      method: 'POST',
+      headers: {"Accept": "application/json", Authorization: 'Bearer ' + token}
+   });
+   const response = await respons.json();
+
+   // console.log(response.data);
+   return response;
 }
 
 // Pega detalhes do usuario:
@@ -50,7 +64,7 @@ export async function USER_DETAILS(token) {
    console.log('CALL FUNCTION API');
 
    const response = await axios.get(API_URL + '/me', { 
-      headers: { "Accept": "application/json", Authorization: "Bearer " + token } 
+      headers: {"Accept": "application/json", Authorization: "Bearer " + token} 
    });
 
    // console.log(response.data);

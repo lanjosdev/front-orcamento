@@ -79,7 +79,7 @@ export default function Home() {
         else {
             // setGrupos(gruposLocal);
             // setShowErro('Erro ao carregar grupos')
-            toast.error('Erro ao carregar grupos');
+            //toast.error('Erro ao carregar grupos');
         }
 
         setLoading(false);

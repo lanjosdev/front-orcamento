@@ -1,11 +1,13 @@
 // Funcionalidades / Libs:
+// import { useEffect, useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-// import { useContext, useState } from "react";
 // import PropTypes from "prop-types";
 
-// import { UserContext } from "../../contexts/userContext";
+// Contexts:
+import { UserContext } from "../../../contexts/userContext";
 
-// // Assets:
+// Assets:
 import Logo from '../../../assets/LOGO-BIZSYS_preto.png';
 // import LogoP from '../../../assets/BIZSYS_logo_icon.png';
 // import { TbLogout } from 'react-icons/tb';
@@ -15,10 +17,26 @@ import './style.css';
 
 
 export function Header() {
-    // const {
-    //     userDetails, 
-    //     logoutUser, 
-    // } = useContext(UserContext);
+    // const [nomeUser, setNomeUser] = useState('');
+    const {
+        loading,
+        userDetails,
+        logoutUser, 
+    } = useContext(UserContext);
+    
+    // useEffect(()=> {
+    //     async function carregaDadosUser() {
+    //         try {
+    //             // let dados = await userDetails;
+    //             setNomeUser(userDetails.name);
+    //         }
+    //         catch(erro) {
+    //             console.log('Erru')
+    //             console.log(erro);
+    //         }
+    //     }
+    //     carregaDadosUser();
+    // }, [userDetails]);
 
     // function closeSidbar() {
     //     let bgSidebar = document.querySelector(".side-background").style;
@@ -34,9 +52,10 @@ export function Header() {
     //     sidebar.display = 'block';
     // }
 
-    // function handleClickLogout() {
-    //     logoutUser();
-    // }
+    async function onLogout() {
+        logoutUser();
+    }
+
 
     return (
         <>
@@ -63,12 +82,16 @@ export function Header() {
                     </ul>
                 </nav>}                 */}
 
-                <button 
-                className='btn-logout'
-                // onClick={handleClickLogout}
-                >
-                    <span>Sair</span>
-                </button>
+                <nav>
+                    <span>{loading ? 'carregando' : userDetails?.name}</span>
+
+                    <button
+                    className='btn-logout'
+                    onClick={onLogout}
+                    >
+                        <span>Sair</span>
+                    </button>
+                </nav>
 
                 {/* {userDetails.loglevel === 100 &&
                 <button 

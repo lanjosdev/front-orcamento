@@ -21,7 +21,7 @@ export default function Login() {
     const passwordRef = useRef('');
     const [showSenha, setShowSenha] = useState(false);
 
-    const { loading, logarUser } = useContext(UserContext); 
+    const { loading, logarUser } = useContext(UserContext);
     // const navigate = useNavigate();
 
 
@@ -43,8 +43,7 @@ export default function Login() {
         const password = passwordRef.current?.value;
 
         if(email !== '' && password !== '') {
-            console.log('logando...');
-            await logarUser(email, password);
+            logarUser(email, password);
         }        
     } 
   
